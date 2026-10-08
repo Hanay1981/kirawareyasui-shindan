@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>嫌われやすい話し方診断 | ジブンwoカシカ</title>
+<meta name="description" content="対人コミュニケーション不安と言語的攻撃性、そして聞く姿勢の3軸から、あなたの話し方の中で嫌われやすい部分を可視化します。">
+<style>
+  :root{
+    --cream:#faf7f2;
+    --ink:#1c1917;
+    --terracotta:#9b6b3a;
+    --line:#e5ddd0;
+    --gray:#6b6258;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Noto Serif JP","Hiragino Mincho ProN",serif;
+    background:var(--cream);
+    color:var(--ink);
+    line-height:1.8;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:32px 20px 80px;}
+  header.top{text-align:center;margin-bottom:32px;}
+  header.top h1{font-size:1.4rem;margin:0 0 8px;}
+  header.top p{font-size:0.9rem;color:var(--gray);margin:0;}
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:28px 22px;
+    margin-bottom:20px;
+  }
+  .intro p{margin:0 0 14px;font-size:0.96rem;}
+  .intro ul{padding-left:1.2em;margin:0 0 14px;}
+  .intro li{margin-bottom:6px;font-size:0.95rem;}
+  .btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:16px;
+    font-size:1rem;
+    font-family:inherit;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  .btn:active{opacity:0.85;}
+  .progress{
+    height:4px;background:var(--line);border-radius:2px;margin-bottom:22px;overflow:hidden;
+  }
+  .progress-bar{height:100%;background:var(--terracotta);width:0%;transition:width .25s;}
+  .qnum{font-size:0.8rem;color:var(--terracotta);margin-bottom:8px;letter-spacing:.05em;}
+  .qtext{font-size:1.08rem;margin:0 0 22px;}
+  .choices{display:flex;flex-direction:column;gap:10px;}
+  .choice{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:14px 16px;
+    font-size:0.92rem;
+    cursor:pointer;
+    background:#fff;
+    text-align:left;
+  }
+  .choice:active, .choice.selected{
+    border-color:var(--terracotta);
+    background:#faf1e8;
+  }
+  .nav-row{display:flex;justify-content:space-between;margin-top:18px;}
+  .link-btn{background:none;border:none;color:var(--gray);font-size:0.85rem;cursor:pointer;font-family:inherit;}
+  #screen-result h2{font-size:1.2rem;border-bottom:2px solid var(--terracotta);padding-bottom:8px;margin-top:0;}
+  .conclusion{
+    background:var(--ink);color:#fff;border-radius:10px;padding:20px;margin-bottom:22px;
+  }
+  .conclusion .label{font-size:0.78rem;color:#d8cdbd;letter-spacing:.08em;margin-bottom:6px;}
+  .conclusion .headline{font-size:1.15rem;font-weight:bold;line-height:1.6;}
+  .boundary-note{
+    margin-top:12px;font-size:0.85rem;color:#e8dcc8;border-top:1px solid #3a342c;padding-top:10px;
+  }
+  .axisbar{margin-bottom:14px;}
+  .axisbar .name{font-size:0.85rem;margin-bottom:4px;display:flex;justify-content:space-between;}
+  .axisbar .track{height:8px;background:var(--line);border-radius:4px;overflow:hidden;}
+  .axisbar .fill{height:100%;background:var(--terracotta);}
+  .section{margin-bottom:26px;}
+  .section h3{font-size:1rem;margin-bottom:10px;}
+  .reliability{font-size:0.82rem;color:var(--gray);margin-top:6px;}
+  .relation-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .relation-tab{
+    border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 14px;font-size:0.82rem;cursor:pointer;
+  }
+  .relation-tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .relation-body{font-size:0.92rem;background:#f5f0e7;border-radius:8px;padding:14px 16px;}
+  footer.note{text-align:center;font-size:0.78rem;color:var(--gray);margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <p style="letter-spacing:.1em;color:var(--terracotta);font-size:0.8rem;">👀ジブンwoカシカ👀</p>
+    <h1>嫌われやすい話し方診断</h1>
+  </header>
+
+  <!-- INTRO -->
+  <div id="screen-intro" class="card intro">
+    <p>自分では普通に話しているつもりなのに、気づくと会話が続かない。そんな経験はありませんか。</p>
+    <p>話し方の「嫌われやすさ」は、性格の良し悪しではなく、ほとんどが行動のクセです。心理学では、言語的攻撃性（Verbal Aggressiveness／Infante &amp; Wigley, 1986）、コミュニケーション不安（Communication Apprehension／McCroskey）、そして聞く姿勢の反応性という、独立した3つの軸で説明されています。</p>
+    <p><strong>この診断でわかること</strong></p>
+    <ul>
+      <li>あなたの話し方のどこに「嫌われやすさ」が出ているか（3つの軸から）</li>
+      <li>自覚しにくい、聞いているつもりで聞けていない部分</li>
+      <li>関係性（家族・恋人・友人・職場）別に、どう出やすいか</li>
+    </ul>
+    <p><strong>受け取れるもの</strong></p>
+    <ul>
+      <li><strong>結論</strong> — 境目に近い結果かどうかも含めた、はっきりとした一言の答え</li>
+      <li><strong>結果</strong> — 3つの軸・6つの要素から導く、あなたの話し方タイプ</li>
+      <li><strong>行動</strong> — 直すべき行動を1つだけに絞った具体策</li>
+      <li><strong>場面</strong> — 家族／恋人／友人／職場での出やすさ</li>
+    </ul>
+    <p style="font-size:0.85rem;color:var(--gray);">全20問、約3分。「こうありたい」ではなく、実際にやっていることで答えると、結果が自分に近づきます。</p>
+    <button class="btn" onclick="startQuiz()">さっそく診断していきましょう！</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="screen-quiz" class="card" style="display:none;">
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="qnum" id="qnum"></div>
+    <p class="qtext" id="qtext"></p>
+    <div class="choices" id="choices"></div>
+    <div class="nav-row">
+      <button class="link-btn" onclick="goBack()">戻る</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screen-result" style="display:none;"></div>
+
+  <footer class="note">
+    ※ この診断は心理学の考え方を参考にした簡易的なセルフチェックです。医療的な診断ではありません。
+  </footer>
+
+</div>
+
+<script>
+/* ============ 質問データ ============
+   axis: VA（言語的攻撃性） / CA（コミュニケーション不安） / LS（聞く姿勢の反応性の低さ）
+   sub : 各axis内の下位要素（2つずつ、計6要素）
+   すべて肯定文・行動ベース。スコアは「高いほどその特徴が強い＝嫌われやすい方向に出やすい」
+*/
+const QUESTIONS = [
+  {id:1,  axis:'VA', sub:'直接指摘', q:'相手の意見が間違っていると感じたとき、その場で指摘することが多い'},
+  {id:2,  axis:'VA', sub:'直接指摘', q:'誰かの失敗を、冗談っぽくいじることがよくある'},
+  {id:3,  axis:'VA', sub:'直接指摘', q:'議論になると、相手の弱い部分を突く言い方をすることがある'},
+  {id:4,  axis:'VA', sub:'直接指摘', q:'会話の中で、相手の考え方そのものを否定する言葉を使うことがある'},
+  {id:5,  axis:'VA', sub:'主張の強さ', q:'自分の意見が正しいと思ったら、相手が折れるまで言い続けることが多い'},
+  {id:6,  axis:'VA', sub:'主張の強さ', q:'相手の話を聞きながら、反論する内容を先に考えていることが多い'},
+  {id:7,  axis:'VA', sub:'主張の強さ', q:'誰かに注意するとき、オブラートに包まず率直に言うことが多い'},
+
+  {id:8,  axis:'CA', sub:'沈黙を埋める', q:'会話中に沈黙ができると、焦って何か話さなければと思うことが多い'},
+  {id:9,  axis:'CA', sub:'沈黙を埋める', q:'間ができると、関係ない話題でもとりあえず口を開いてしまうことが多い'},
+  {id:10, axis:'CA', sub:'沈黙を埋める', q:'初対面の相手との沈黙に耐えられず、早口になることが多い'},
+  {id:11, axis:'CA', sub:'沈黙を埋める', q:'気まずい空気を感じると、笑ってごまかすことが多い'},
+  {id:12, axis:'CA', sub:'開示を避ける', q:'踏み込んだ話題になると、話をそらして別の話に変えることが多い'},
+  {id:13, axis:'CA', sub:'開示を避ける', q:'自分のことを聞かれると、簡潔に答えて早めに話題を変えることが多い'},
+  {id:14, axis:'CA', sub:'開示を避ける', q:'本音を聞かれても、当たり障りのない答えで済ませることが多い'},
+
+  {id:15, axis:'LS', sub:'話を遮る', q:'相手が話している途中でも、自分の話したいことを挟むことが多い'},
+  {id:16, axis:'LS', sub:'話を遮る', q:'相手の話を聞きながら、自分の似た経験を話す準備をしていることが多い'},
+  {id:17, axis:'LS', sub:'話を遮る', q:'会話の中心が、気づくと自分の話題に戻ってきていることが多い'},
+  {id:18, axis:'LS', sub:'反応の薄さ', q:'相手の話にうなずいたり相槌を打つのは、最小限で済ませることが多い'},
+  {id:19, axis:'LS', sub:'反応の薄さ', q:'相手の話の内容を、自分の言葉で確認し直すことはあまりしない'},
+  {id:20, axis:'LS', sub:'反応の薄さ', q:'相手が話し終わったあと、すぐ自分の話を始めることが多い'},
+];
+
+const CHOICES = [
+  {v:1, label:'全く当てはまらない'},
+  {v:2, label:'あまり当てはまらない'},
+  {v:3, label:'どちらとも言えない'},
+  {v:4, label:'やや当てはまる'},
+  {v:5, label:'非常に当てはまる'},
+];
+
+const SUB_META = {
+  '直接指摘':  {axis:'VA', n:4},
+  '主張の強さ': {axis:'VA', n:3},
+  '沈黙を埋める':{axis:'CA', n:4},
+  '開示を避ける':{axis:'CA', n:3},
+  '話を遮る':  {axis:'LS', n:3},
+  '反応の薄さ': {axis:'LS', n:3},
+};
+
+const AXIS_META = {
+  VA: {name:'言語的攻撃性', n:7, subs:['直接指摘','主張の強さ']},
+  CA: {name:'コミュニケーション不安', n:7, subs:['沈黙を埋める','開示を避ける']},
+  LS: {name:'聞く姿勢の反応性の低さ', n:6, subs:['話を遮る','反応の薄さ']},
+};
+
+let current = 0;
+let answers = {};
+
+function startQuiz(){
+  document.getElementById('screen-intro').style.display='none';
+  document.getElementById('screen-quiz').style.display='block';
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  document.getElementById('qnum').textContent = `Q${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('qtext').textContent = q.q;
+  document.getElementById('progressBar').style.width = `${(current/QUESTIONS.length)*100}%`;
+  const box = document.getElementById('choices');
+  box.innerHTML = '';
+  CHOICES.forEach(c=>{
+    const btn = document.createElement('button');
+    btn.className = 'choice' + (answers[q.id]===c.v ? ' selected' : '');
+    btn.textContent = c.label;
+    btn.onclick = ()=> selectAnswer(q.id, c.v);
+    box.appendChild(btn);
+  });
+}
+
+function selectAnswer(qid, val){
+  answers[qid] = val;
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function goBack(){
+  if(current > 0){
+    current--;
+    renderQuestion();
+  } else {
+    document.getElementById('screen-quiz').style.display='none';
+    document.getElementById('screen-intro').style.display='block';
+  }
+}
+
+/* ============ 採点 ============ */
+function computeScores(){
+  const subSums = {};
+  Object.keys(SUB_META).forEach(s=> subSums[s] = []);
+  QUESTIONS.forEach(q=>{
+    const v = answers[q.id];
+    subSums[q.sub].push(v);
+  });
+
+  const subPct = {};
+  Object.keys(SUB_META).forEach(s=>{
+    const vals = subSums[s];
+    const n = vals.length;
+    const sum = vals.reduce((a,b)=>a+b,0);
+    subPct[s] = Math.round(((sum - n) / (n*4)) * 100);
+  });
+
+  const axisPct = {};
+  Object.keys(AXIS_META).forEach(ax=>{
+    const subs = AXIS_META[ax].subs;
+    let sum=0, n=0;
+    subs.forEach(s=>{
+      subSums[s].forEach(v=>{ sum+=v; n++; });
+    });
+    axisPct[ax] = Math.round(((sum - n) / (n*4)) * 100);
+  });
+
+  return {subPct, axisPct};
+}
+
+function band(pct){
+  if(pct >= 65) return 'H';
+  if(pct >= 40) return 'M';
+  return 'L';
+}
+
+const AXIS_TEXT = {
+  VA: {
+    H: '言葉に鋭さが出やすいタイプです。正しさや率直さを優先するあまり、相手の受け取り方まで気が回らないことがあります。',
+    M: '必要な場面では指摘できますが、言い方が強くなりすぎることもある、standardな範囲です。',
+    L: '言葉で相手を追い詰めることはほとんどないタイプです。ここは強みです。',
+  },
+  CA: {
+    H: '沈黙や踏み込んだ話題に弱く、その不安が早口・話題逸らしという形で表に出やすいタイプです。',
+    M: '状況によって緊張が出ることもありますが、大きく崩れることはない範囲です。',
+    L: '沈黙や深い話題にも落ち着いて対応できるタイプです。ここは強みです。',
+  },
+  LS: {
+    H: '聞いているつもりでも、実際には自分の話に意識が向きやすいタイプです。相手は「聞いてもらえていない」と感じやすい状態です。',
+    M: '聞けている場面と、つい話を被せてしまう場面が両方あるタイプです。',
+    L: '相手の話をしっかり受け止めて聞けているタイプです。ここは強みです。',
+  }
+};
+
+const SUB_ADVICE = {
+  '直接指摘':  '気づいたことをその場で全部言わず、一度持ち帰ってから伝える練習をしてみてください。',
+  '主張の強さ': '相手が一度「わかった」と言ったら、そこで自分の主張を重ねないようにしてみてください。',
+  '沈黙を埋める':'沈黙ができても3秒待ってみてください。相手が話し出すことのほうが多いです。',
+  '開示を避ける':'踏み込まれた話題で、ひとつだけ本音を混ぜて答えてみてください。',
+  '話を遮る':  '相手が話し終わるまで、自分の話したいことを頭の中にだけ置いておいてみてください。',
+  '反応の薄さ': '相手の話を一度、自分の言葉で「つまり〜ってこと？」と確認してみてください。',
+};
+
+const RELATION_ADVICE = {
+  VA: {
+    family: '家族には、正しさより「言い方」だけ少し和らげると関係が変わります。',
+    partner: '恋人には、指摘の前に一度気持ちを受け止める一言を添えてみてください。',
+    friend: '友人には、冗談のつもりが本気の指摘に聞こえていないか、反応を見てみてください。',
+    boss: '職場では、指摘自体は評価されやすい一方、言い方で損をしている可能性があります。',
+  },
+  CA: {
+    family: '家族の前では気を抜いて話せているはずなので、その感覚を他の relationshipsにも少しずつ持ち込んでみてください。',
+    partner: '恋人には、沈黙を怖がらず黙っていい時間として受け止めてもらうと楽になります。',
+    friend: '友人との間では、話題を変えずに一度踏みとどまってみると距離が縮まります。',
+    boss: '職場では、間を埋めようとする早口が「余裕のなさ」に見えていることがあります。',
+  },
+  LS: {
+    family: '家族の話は聞き流しがちになりやすいので、相槌だけでも意識してみてください。',
+    partner: '恋人の話を遮らずに最後まで聞くと、それだけで満足度が大きく変わります。',
+    friend: '友人との会話では、自分の話に戻す前にもう一往復質問してみてください。',
+    boss: '職場では、聞く姿勢が信頼につながりやすいので、要約して返す一言が効きます。',
+  }
+};
+
+function showResult(){
+  document.getElementById('screen-quiz').style.display='none';
+  const {subPct, axisPct} = computeScores();
+
+  const axisBands = {};
+  Object.keys(axisPct).forEach(ax=> axisBands[ax] = band(axisPct[ax]));
+
+  // 最も高い（＝最も出やすい）下位要素を探す
+  let weakestSub = null, weakestVal = -1;
+  Object.keys(subPct).forEach(s=>{
+    if(subPct[s] > weakestVal){ weakestVal = subPct[s]; weakestSub = s; }
+  });
+
+  // 境目チェック（帯の閾値±5点）
+  const boundaries = [40, 65];
+  let nearBoundaryAxes = [];
+  Object.keys(axisPct).forEach(ax=>{
+    boundaries.forEach(b=>{
+      if(Math.abs(axisPct[ax] - b) <= 5) nearBoundaryAxes.push(AXIS_META[ax].name);
+    });
+  });
+
+  // 全体の最高軸（結論の見出しに使う）
+  let topAxis = Object.keys(axisPct).reduce((a,b)=> axisPct[a] >= axisPct[b] ? a : b);
+  const topBand = axisBands[topAxis];
+
+  const allLow = Object.values(axisBands).every(b=> b==='L');
+
+  let headline;
+  if(allLow){
+    headline = '話し方で嫌われやすい要素は、目立って出ていません。';
+  } else if(topBand === 'H'){
+    headline = `いちばん出ているのは「${AXIS_META[topAxis].name}」です。`;
+  } else {
+    headline = `際立って強い要素はなく、「${AXIS_META[topAxis].name}」がやや出やすい程度です。`;
+  }
+
+  let html = '';
+  html += `<div class="conclusion">
+    <div class="label">結論</div>
+    <div class="headline">${headline}</div>
+    ${nearBoundaryAxes.length ? `<div class="boundary-note">${nearBoundaryAxes.join('・')}は、隣の帯との境目に近い結果でした。もう一方の傾向が混ざっている可能性もあります。</div>` : ''}
+  </div>`;
+
+  html += `<div class="card section">
+    <h3>結果 — 3つの軸</h3>
+    ${Object.keys(AXIS_META).map(ax=>{
+      const pct = axisPct[ax];
+      return `<div class="axisbar">
+        <div class="name"><span>${AXIS_META[ax].name}</span><span>${axisBands[ax]==='H'?'強く出ている':axisBands[ax]==='M'?'ときどき出る':'あまり出ていない'}</span></div>
+        <div class="track"><div class="fill" style="width:${pct}%;"></div></div>
+        <p style="font-size:0.88rem;color:var(--gray);margin:6px 0 0;">${AXIS_TEXT[ax][axisBands[ax]]}</p>
+      </div>`;
+    }).join('')}
+    <p class="reliability">※ 回答の一貫性: ${checkReliability() ? '安定した回答でした。結果の信頼性は高めです。' : '回答にばらつきが見られました。参考程度にご覧ください。'}</p>
+  </div>`;
+
+  html += `<div class="card section">
+    <h3>行動 — まず直すならここ</h3>
+    <p>いちばん出ていたのは「<strong>${weakestSub}</strong>」でした。</p>
+    <p>${SUB_ADVICE[weakestSub]}</p>
+  </div>`;
+
+  html += `<div class="card section">
+    <h3>場面 — 関係性別の出やすさ</h3>
+    <div class="relation-tabs" id="relTabs">
+      ${['family','partner','friend','boss'].map((r,i)=>`<button class="relation-tab${i===0?' active':''}" data-r="${r}" onclick="switchRelation('${r}')">${{family:'家族',partner:'恋人',friend:'友人',boss:'職場'}[r]}</button>`).join('')}
+    </div>
+    <div class="relation-body" id="relBody">${RELATION_ADVICE[topAxis]['family']}</div>
+  </div>`;
+
+  html += `<div class="card section">
+    <h3>内心 — 周りがたぶん思っていること</h3>
+    <p>${innerVoice(topAxis, topBand)}</p>
+  </div>`;
+
+  window._topAxisForRelation = topAxis;
+
+  document.getElementById('screen-result').innerHTML = html;
+  document.getElementById('screen-result').style.display = 'block';
+}
+
+function switchRelation(r){
+  document.querySelectorAll('.relation-tab').forEach(t=> t.classList.toggle('active', t.dataset.r===r));
+  document.getElementById('relBody').textContent = RELATION_ADVICE[window._topAxisForRelation][r];
+}
+
+function innerVoice(ax, b){
+  if(b !== 'H'){
+    return '特に困った印象は持たれていないはずです。話していて楽、と思われている可能性が高いです。';
+  }
+  const texts = {
+    VA: '「話すとちょっと緊張する」「否定されそうで本音を言いにくい」と思われている可能性があります。',
+    CA: '「何を考えているかわからない」「もっと話してほしい」と思われている可能性があります。',
+    LS: '「話を聞いてもらえていない気がする」「自分の話ばかりだな」と思われている可能性があります。',
+  };
+  return texts[ax];
+}
+
+function checkReliability(){
+  // 極端回答（全部1 or 全部5 など）や矛盾パターンの簡易チェック
+  const vals = QUESTIONS.map(q=> answers[q.id]);
+  const uniq = new Set(vals);
+  if(uniq.size <= 2) return false;
+  return true;
+}
+</script>
+</body>
+</html>
