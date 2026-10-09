@@ -88,11 +88,14 @@
   .section{margin-bottom:26px;}
   .section h3{font-size:1rem;margin-bottom:10px;}
   .reliability{font-size:0.82rem;color:var(--gray);margin-top:6px;}
-  .relation-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
-  .relation-tab{
-    border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 14px;font-size:0.82rem;cursor:pointer;
-  }
-  .relation-tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .subbars{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);}
+  .subbar{margin-bottom:10px;}
+  .subbar:last-child{margin-bottom:0;}
+  .subbar .subname{font-size:0.78rem;color:var(--gray);margin-bottom:4px;display:flex;justify-content:space-between;}
+  .track.small{height:5px;}
+  .relation-item{margin-bottom:16px;}
+  .relation-item:last-child{margin-bottom:0;}
+  .relation-label{font-size:0.8rem;color:var(--terracotta);letter-spacing:.05em;margin-bottom:6px;font-weight:bold;}
   .relation-body{font-size:0.92rem;background:#f5f0e7;border-radius:8px;padding:14px 16px;}
   footer.note{text-align:center;font-size:0.78rem;color:var(--gray);margin-top:30px;}
 </style>
@@ -161,7 +164,7 @@ const QUESTIONS = [
   {id:6,  axis:'VA', sub:'主張の強さ', q:'相手の話を聞きながら、反論する内容を先に考えていることが多い'},
   {id:7,  axis:'VA', sub:'主張の強さ', q:'誰かに注意するとき、オブラートに包まず率直に言うことが多い'},
 
-  {id:8,  axis:'CA', sub:'沈黙を埋める', q:'会話中に沈黙ができると、焦って何か話さなければと思うことが多い'},
+  {id:8,  axis:'CA', sub:'沈黙を埋める', q:'沈黙ができそうになると、「えっと」「そうですね」のような言葉を挟んで、とりあえず間をつなぐことが多い'},
   {id:9,  axis:'CA', sub:'沈黙を埋める', q:'間ができると、関係ない話題でもとりあえず口を開いてしまうことが多い'},
   {id:10, axis:'CA', sub:'沈黙を埋める', q:'間ができそうになると、特に聞きたいわけではないことでも、とりあえず質問して間を埋めることが多い'},
   {id:11, axis:'CA', sub:'沈黙を埋める', q:'気まずい空気を感じると、笑ってごまかすことが多い'},
@@ -283,49 +286,49 @@ function band(pct){
 
 const AXIS_TEXT = {
   VA: {
-    H: '言葉に鋭さが出やすいタイプです。正しさや率直さを優先するあまり、相手の受け取り方まで気が回らないことがあります。',
-    M: '必要な場面では指摘できますが、言い方が強くなりすぎることもある、標準的な範囲です。',
-    L: '言葉で相手を追い詰めることはほとんどないタイプです。ここは強みです。',
+    H: '言葉に鋭さが出やすいタイプです。「正しいことを言っている」という自信があるぶん、相手がどう受け止めるかにまで意識が向きにくくなります。心理学ではこれを言語的攻撃性（Verbal Aggressiveness）と呼び、指摘の内容そのものより、言い方の強さが相手に「攻撃された」という印象を残すことがわかっています。悪気がなくても、繰り返されると関係が少しずつ疎遠になりやすい要素です。',
+    M: '必要な場面ではきちんと指摘できる一方、相手や状況によっては言い方が強くなりすぎることもある、標準的な範囲です。普段は問題になりにくいものの、感情が動いたときや相手が反論してきたときに、言葉が鋭くなる傾向が出やすいタイプだと考えられます。',
+    L: '言葉で相手を追い詰めることはほとんどないタイプです。意見を伝えるときも、相手の立場を踏まえた言い方を自然にできているはずです。これは話し方における明確な強みで、信頼関係を築きやすい要素でもあります。',
   },
   CA: {
-    H: '沈黙や踏み込んだ話題に弱く、その不安が早口・話題逸らしという形で表に出やすいタイプです。',
-    M: '状況によって緊張が出ることもありますが、大きく崩れることはない範囲です。',
-    L: '沈黙や深い話題にも落ち着いて対応できるタイプです。ここは強みです。',
+    H: '沈黙や踏み込んだ話題に弱く、その不安が早口・話題逸らし・曖昧な返事という形で表に出やすいタイプです。心理学ではこれをコミュニケーション不安（Communication Apprehension）と呼び、本人の意思とは関係なく不安が先に行動を決めてしまう状態を指します。相手からは「心を開いてくれていない」と誤解されやすく、実際の気持ちとのズレが生まれやすい要素です。',
+    M: '状況によって緊張が出ることもありますが、大きく崩れることはない範囲です。初対面や深い話題では少し身構えるものの、関係が深まるにつれて落ち着いて話せるようになるタイプだと考えられます。',
+    L: '沈黙や深い話題にも落ち着いて対応できるタイプです。間ができても焦って埋めようとせず、相手のペースに合わせられる、話し方における大きな強みです。',
   },
   LS: {
-    H: '聞いているつもりでも、実際には自分の話に意識が向きやすいタイプです。相手は「聞いてもらえていない」と感じやすい状態です。',
-    M: '聞けている場面と、つい話を被せてしまう場面が両方あるタイプです。',
-    L: '相手の話をしっかり受け止めて聞けているタイプです。ここは強みです。',
+    H: '聞いているつもりでも、実際には自分の話に意識が向きやすいタイプです。相手が話している途中で次に話すことを考えていたり、気づくと話題が自分に戻っていたりすることが多く、相手は「聞いてもらえていない」と感じやすい状態です。本人に悪気がない分、指摘されるまで気づきにくいという特徴もあります。',
+    M: '聞けている場面と、つい話を被せてしまう場面が両方あるタイプです。相手や話題によって聞く姿勢にムラが出やすく、親しい相手ほど反応が薄くなる傾向があるかもしれません。',
+    L: '相手の話をしっかり受け止めて聞けているタイプです。相槌や確認の一言が自然に出ているはずで、「話しやすい人」として周囲から信頼されやすい要素です。',
   }
 };
 
 const SUB_ADVICE = {
-  '直接指摘':  '気づいたことをその場で全部言わず、一度持ち帰ってから伝える練習をしてみてください。',
-  '主張の強さ': '相手が一度「わかった」と言ったら、そこで自分の主張を重ねないようにしてみてください。',
-  '沈黙を埋める':'沈黙ができても3秒待ってみてください。相手が話し出すことのほうが多いです。',
-  '開示を避ける':'踏み込まれた話題で、ひとつだけ本音を混ぜて答えてみてください。',
-  '話を遮る':  '相手が話し終わるまで、自分の話したいことを頭の中にだけ置いておいてみてください。',
-  '反応の薄さ': '相手の話を一度、自分の言葉で「つまり〜ってこと？」と確認してみてください。',
+  '直接指摘':  '気づいたことをその場で全部言わず、一度持ち帰ってから伝える練習をしてみてください。「今は伝えない」という判断も、相手への配慮のひとつです。気づいた瞬間にメモだけして、その場では飲み込む、というところから始めると取り組みやすくなります。',
+  '主張の強さ': '相手が一度「わかった」と言ったら、そこで自分の主張を重ねないようにしてみてください。正しさを証明することより、相手が納得した状態を守ることを優先する、という意識の切り替えが効果的です。',
+  '沈黙を埋める':'沈黙ができても3秒だけ待ってみてください。多くの場合、相手のほうから話し出します。沈黙は気まずいものではなく、相手が考えている時間でもある、と捉え直すだけでも焦りが減ります。',
+  '開示を避ける':'踏み込まれた話題で、ひとつだけ本音を混ぜて答えてみてください。全部話す必要はありません。「ひとつだけ」というハードルの低さが、相手との距離を少しずつ縮めてくれます。',
+  '話を遮る':  '相手が話し終わるまで、自分の話したいことを頭の中にだけ置いておいてみてください。「忘れてしまうかも」と思うかもしれませんが、本当に大事なことは、相手の話が終わったあとでも自然に思い出せるものです。',
+  '反応の薄さ': '相手の話を一度、自分の言葉で「つまり〜ってこと？」と確認してみてください。相槌よりも効果的に「ちゃんと聞いている」ことが伝わり、相手の話もより引き出しやすくなります。',
 };
 
 const RELATION_ADVICE = {
   VA: {
-    family: '家族には、正しさより「言い方」だけ少し和らげると関係が変わります。',
-    partner: '恋人には、指摘の前に一度気持ちを受け止める一言を添えてみてください。',
-    friend: '友人には、冗談のつもりが本気の指摘に聞こえていないか、反応を見てみてください。',
-    boss: '職場では、指摘自体は評価されやすい一方、言い方で損をしている可能性があります。',
+    family: '家族には、正しさよりも「言い方」だけ少し和らげると関係が変わりやすいです。長年の関係だからこそ、指摘の内容は正しくても、言葉の強さがそのまま積み重なって距離を生むことがあります。',
+    partner: '恋人には、指摘の前に一度気持ちを受け止める一言を添えてみてください。「それは違うと思う」の前に「そう感じたんだね」を置くだけで、同じ内容でも伝わり方が大きく変わります。',
+    friend: '友人には、冗談のつもりが本気の指摘に聞こえていないか、相手の反応を見てみてください。笑って流しているように見えても、内心は傷ついているケースは珍しくありません。',
+    boss: '職場では、指摘自体は評価されやすい一方、言い方で損をしている可能性があります。内容は正しくても、言い方がきついと「扱いにくい人」という印象だけが残ってしまうことがあります。',
   },
   CA: {
-    family: '家族の前では気を抜いて話せているはずなので、その感覚を他の relationshipsにも少しずつ持ち込んでみてください。',
-    partner: '恋人には、沈黙を怖がらず黙っていい時間として受け止めてもらうと楽になります。',
-    friend: '友人との間では、話題を変えずに一度踏みとどまってみると距離が縮まります。',
-    boss: '職場では、間を埋めようとする早口が「余裕のなさ」に見えていることがあります。',
+    family: '家族の前では気を抜いて話せているはずです。その「素のまま話せる感覚」を、少しずつ他の関係にも持ち込んでいけると、コミュニケーション不安は和らいでいきます。',
+    partner: '恋人には、沈黙を怖がらず「黙っていてもいい時間」として受け止めてもらえると、関係が楽になります。無理に埋めようとせず、黙っていることをそのまま伝えてみるのもひとつの方法です。',
+    friend: '友人との間では、話題を変えずに一度踏みとどまってみると、距離がぐっと縮まります。踏み込まれて居心地が悪くても、そこで逃げずにいることが信頼につながります。',
+    boss: '職場では、間を埋めようとする早口や曖昧な返事が「余裕のなさ」「仕事ができなそう」に見えてしまうことがあります。結論から一言だけ先に言う練習が効果的です。',
   },
   LS: {
-    family: '家族の話は聞き流しがちになりやすいので、相槌だけでも意識してみてください。',
-    partner: '恋人の話を遮らずに最後まで聞くと、それだけで満足度が大きく変わります。',
-    friend: '友人との会話では、自分の話に戻す前にもう一往復質問してみてください。',
-    boss: '職場では、聞く姿勢が信頼につながりやすいので、要約して返す一言が効きます。',
+    family: '家族の話は聞き流しがちになりやすいので、相槌だけでも意識してみてください。「知っているはず」という油断が、実は一番すれ違いを生みやすい相手でもあります。',
+    partner: '恋人の話を遮らずに最後まで聞くと、それだけで満足度が大きく変わります。解決策を提示する前に、まず最後まで聞き切ることを意識してみてください。',
+    friend: '友人との会話では、自分の話に戻す前にもう一往復、相手に質問を返してみてください。それだけで「ちゃんと興味を持ってくれている」という印象に変わります。',
+    boss: '職場では、聞く姿勢が信頼につながりやすいので、要約して返す一言が効きます。「つまり〜ということですね」と返すだけで、理解力・傾聴力の評価が上がりやすくなります。',
   }
 };
 
@@ -336,11 +339,10 @@ function showResult(){
   const axisBands = {};
   Object.keys(axisPct).forEach(ax=> axisBands[ax] = band(axisPct[ax]));
 
-  // 最も高い（＝最も出やすい）下位要素を探す
-  let weakestSub = null, weakestVal = -1;
-  Object.keys(subPct).forEach(s=>{
-    if(subPct[s] > weakestVal){ weakestVal = subPct[s]; weakestSub = s; }
-  });
+  // 最も高い（＝最も出やすい）下位要素と、2番目に高い下位要素を探す
+  const subRanking = Object.keys(subPct).sort((a,b)=> subPct[b]-subPct[a]);
+  const weakestSub = subRanking[0];
+  const secondSub = subRanking[1];
 
   // 境目チェック（帯の閾値±5点）
   const boundaries = [40, 65];
@@ -351,8 +353,9 @@ function showResult(){
     });
   });
 
-  // 全体の最高軸（結論の見出しに使う）
+  // 全体の最高軸・最低軸（結論の見出しに使う）
   let topAxis = Object.keys(axisPct).reduce((a,b)=> axisPct[a] >= axisPct[b] ? a : b);
+  let lowAxis = Object.keys(axisPct).reduce((a,b)=> axisPct[a] <= axisPct[b] ? a : b);
   const topBand = axisBands[topAxis];
 
   const allLow = Object.values(axisBands).every(b=> b==='L');
@@ -366,10 +369,16 @@ function showResult(){
     headline = `際立って強い要素はなく、「${AXIS_META[topAxis].name}」がやや出やすい程度です。`;
   }
 
+  let contrastNote = '';
+  if(!allLow && topAxis !== lowAxis){
+    contrastNote = `一方で「${AXIS_META[lowAxis].name}」はあまり出ていません。ここは直そうとせず、今のまま大切にしてください。`;
+  }
+
   let html = '';
   html += `<div class="conclusion">
     <div class="label">結論</div>
     <div class="headline">${headline}</div>
+    ${contrastNote ? `<p style="font-size:0.9rem;color:#e8dcc8;margin:10px 0 0;">${contrastNote}</p>` : ''}
     ${nearBoundaryAxes.length ? `<div class="boundary-note">${nearBoundaryAxes.join('・')}は、隣の帯との境目に近い結果でした。もう一方の傾向が混ざっている可能性もあります。</div>` : ''}
   </div>`;
 
@@ -377,10 +386,21 @@ function showResult(){
     <h3>結果 — 3つの軸</h3>
     ${Object.keys(AXIS_META).map(ax=>{
       const pct = axisPct[ax];
+      const subs = AXIS_META[ax].subs;
       return `<div class="axisbar">
         <div class="name"><span>${AXIS_META[ax].name}</span><span>${axisBands[ax]==='H'?'強く出ている':axisBands[ax]==='M'?'ときどき出る':'あまり出ていない'}</span></div>
         <div class="track"><div class="fill" style="width:${pct}%;"></div></div>
         <p style="font-size:0.88rem;color:var(--gray);margin:6px 0 0;">${AXIS_TEXT[ax][axisBands[ax]]}</p>
+        <div class="subbars">
+          ${subs.map(s=>{
+            const sp = subPct[s];
+            const sb = band(sp);
+            return `<div class="subbar">
+              <div class="subname"><span>${s}</span><span>${sb==='H'?'強め':sb==='M'?'やや出る':'控えめ'}</span></div>
+              <div class="track small"><div class="fill" style="width:${sp}%;"></div></div>
+            </div>`;
+          }).join('')}
+        </div>
       </div>`;
     }).join('')}
     <p class="reliability">※ 回答の一貫性: ${checkReliability() ? '安定した回答でした。結果の信頼性は高めです。' : '回答にばらつきが見られました。参考程度にご覧ください。'}</p>
@@ -390,14 +410,15 @@ function showResult(){
     <h3>行動 — まず直すならここ</h3>
     <p>いちばん出ていたのは「<strong>${weakestSub}</strong>」でした。</p>
     <p>${SUB_ADVICE[weakestSub]}</p>
+    <p style="font-size:0.88rem;color:var(--gray);margin-top:14px;border-top:1px solid var(--line);padding-top:12px;">次に意識するなら「<strong>${secondSub}</strong>」です。${SUB_ADVICE[secondSub]}</p>
   </div>`;
 
   html += `<div class="card section">
     <h3>場面 — 関係性別の出やすさ</h3>
-    <div class="relation-tabs" id="relTabs">
-      ${['family','partner','friend','boss'].map((r,i)=>`<button class="relation-tab${i===0?' active':''}" data-r="${r}" onclick="switchRelation('${r}')">${{family:'家族',partner:'恋人',friend:'友人',boss:'職場'}[r]}</button>`).join('')}
-    </div>
-    <div class="relation-body" id="relBody">${RELATION_ADVICE[topAxis]['family']}</div>
+    ${['family','partner','friend','boss'].map(r=>`<div class="relation-item">
+      <div class="relation-label">${{family:'家族',partner:'恋人',friend:'友人',boss:'職場'}[r]}</div>
+      <div class="relation-body">${RELATION_ADVICE[topAxis][r]}</div>
+    </div>`).join('')}
   </div>`;
 
   html += `<div class="card section">
@@ -405,25 +426,18 @@ function showResult(){
     <p>${innerVoice(topAxis, topBand)}</p>
   </div>`;
 
-  window._topAxisForRelation = topAxis;
-
   document.getElementById('screen-result').innerHTML = html;
   document.getElementById('screen-result').style.display = 'block';
 }
 
-function switchRelation(r){
-  document.querySelectorAll('.relation-tab').forEach(t=> t.classList.toggle('active', t.dataset.r===r));
-  document.getElementById('relBody').textContent = RELATION_ADVICE[window._topAxisForRelation][r];
-}
-
 function innerVoice(ax, b){
   if(b !== 'H'){
-    return '特に困った印象は持たれていないはずです。話していて楽、と思われている可能性が高いです。';
+    return '特に困った印象は持たれていないはずです。話していて楽、安心できる、と思われている可能性が高いタイプです。無理に変えようとせず、今のままの話し方を大切にしてください。';
   }
   const texts = {
-    VA: '「話すとちょっと緊張する」「否定されそうで本音を言いにくい」と思われている可能性があります。',
-    CA: '「何を考えているかわからない」「もっと話してほしい」と思われている可能性があります。',
-    LS: '「話を聞いてもらえていない気がする」「自分の話ばかりだな」と思われている可能性があります。',
+    VA: '「話すとちょっと緊張する」「否定されそうで本音を言いにくい」と思われている可能性があります。内容は間違っていなくても、身構えられてしまっているかもしれません。',
+    CA: '「何を考えているかわからない」「もっと話してほしい」と思われている可能性があります。距離を置かれているわけではなく、むしろもっと知りたいと思われていることが多いです。',
+    LS: '「話を聞いてもらえていない気がする」「自分の話ばかりだな」と思われている可能性があります。悪気がないことは伝わりにくいぶん、行動で示すことが大切です。',
   };
   return texts[ax];
 }
